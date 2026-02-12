@@ -1,5 +1,3 @@
-from account import account
-
 class Bank:
     def __init__(self):
         self._customer_details = {}
