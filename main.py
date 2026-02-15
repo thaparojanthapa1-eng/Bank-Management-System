@@ -20,7 +20,7 @@ def main():
             break
 
         customer=bank.find_account(Customer_id)
-        if customer=="Account not found":
+        if customer=="Account not found" and Customer_id!="new":
             print("\nCustomer_id doesn't exist")  
             print("\nWould you like to create a new account to use our services?")
             if Customer_id!="new":
@@ -47,7 +47,7 @@ def main():
             account_link=input("\nEnter 'Yes' if you have a pre-existing account and 'No' if you don't have a pre-existing account:   ").lower().strip()
             if account_link=="yes":
                 while True:
-                    linked_account=input("Enter account you want to link with:  ")
+                    linked_account=input("Enter customer_id of the account you want to link with:  ")
                     linked_account_check=bank.find_account(linked_account)
                     if linked_account_check=="Account not found":
                         print("The account doesn't exist.\nPlease try again")
@@ -74,7 +74,48 @@ def main():
                 income_level=income_level,
                 nominee_name=nominee_name,
                 linked_accounts=linked_account_list
-            )
+            )   
+            customer=new_customer         
+            bank.add_customer_details({Customer_id: new_customer})
+            print(f"Customer {Customer_id} created successfully!\n")
+            
+            print(f"Welcome, {customer.customer_name}")
+            services_check=input("Do you want to use our services?\nPress Yes to continue and anything else to exit").lower().strip()
+            if services_check!="yes":
+                break
+            else:
+                while True:
+                    print("\nSelect an option:")
+                    print("1. Check balance")
+                    print("2. Deposit money")
+                    print("3. Withdraw money")
+                    print("4. View linked accounts")
+                    print("5. Logout")
+                    choice = input("Enter option number: ").strip()
+                    acc=Account(customer.customer_id, balance=0)
+
+                    if choice=="1":
+                        print(f"The balance is {acc.balance_check}")
+
+                    if choice=="2":
+                        amount = float(input("Enter amount to deposit: "))
+                        print(acc.deposit(amount))
+
+                    if choice=="3":
+                        amount = float(input("Enter amount to withdraw: "))
+                        print(acc.withdrawal(amount))
+
+                    if choice=="4":
+                        print("Linked accounts:")
+                        for linked_acc in customer.linked_accounts:
+                            print(f"Linked Account: {linked_acc}")
+
+                    elif choice == "5":
+                        print(f"Logging out {customer.customer_name}...\n")
+                        break
+
+                    else:
+                        print("Invalid option. Try again.")
 
 if __name__=="__main__":
     main()
